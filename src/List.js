@@ -3,15 +3,18 @@ import './App.css';
 
 class List extends Component {
   // Javascript Defined Method
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
+    // Default State
     this.state = {
+      items: [ 'Cheese', 'Milk', 'Eggs' ],
       checkedItems: []
     };
 
     // Forcing 'toggleCheck' to always have the same 'this' context no matter where it is invoked/executed
     this.toggleCheck = this.toggleCheck.bind(this);
+    this.addItem = this.addItem.bind(this);
   }
 
   // Our Method
@@ -41,22 +44,42 @@ class List extends Component {
     }
   }
 
+  // Our Method
+  addItem(e) {
+    e.preventDefault(); // Stops default 'form submit' page reload
+
+    const { items } = this.state;
+    const inputElement = e.target.elements['itemInput'];
+    const newItem = inputElement.value;
+
+    console.log("Add Item: ", newItem);
+
+    // New array with new item added
+    this.setState({
+      items: [
+        ...items,
+        newItem
+      ]
+    });
+  }
+
   // React Defined Method
   render() {
-    const items = [ 'Cheese', 'Milk', 'Eggs', 'Item1' ]; // Array Object
-    const { checkedItems } = this.state;
+    const { items, checkedItems } = this.state;
 
     return (
       <div>
-        <input/>
+        <form onSubmit={ this.addItem }>
+          <input id="itemInput"/>
+        </form>
         <ul>
           {
-            items.map((item) => { // item => Milk
+            items.map((item, index) => { // item => Cheese
               const myStyle = {
                 textDecoration: checkedItems.includes(item) ? 'line-through' : 'none'
-              }; // none
+              }; // line-through or none
 
-              return <li style={ myStyle } onClick={ this.toggleCheck }>{ item }</li>;
+              return <li key={ index } style={ myStyle } onClick={ this.toggleCheck }>{ item }</li>;
             })
           }
         </ul>
