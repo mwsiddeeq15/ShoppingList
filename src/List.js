@@ -7,10 +7,7 @@ class List extends Component {
     super();
 
     this.state = {
-      checkedItems: [
-        "Item1",
-        "Item3"
-      ]
+      checkedItems: []
     };
 
     // Forcing 'toggleCheck' to always have the same 'this' context no matter where it is invoked/executed
@@ -19,10 +16,10 @@ class List extends Component {
 
   // Our Method
   toggleCheck(e) {
-    console.log("Event: ", e)
     const { checkedItems } = this.state; // [......]
     const itemText = e.target.innerHTML; // Item1
     const itemIndex = checkedItems.indexOf(itemText); // 0
+    console.log(`Toggled ${ itemIndex === -1 ? 'Check' : 'UnChecked' } `, itemText)
 
     // Remember if it is "-1" it is NOT in the array!!!!!
     if(itemIndex === -1) {
@@ -46,30 +43,24 @@ class List extends Component {
 
   // React Defined Method
   render() {
-    const myStyle = [
-      { textDecoration: this.state.checkedItems.includes('Item1') ? "line-through" : "none" },
-      { textDecoration: this.state.checkedItems.includes('Item2') ? "line-through" : "none" },
-      { textDecoration: this.state.checkedItems.includes('Item3') ? "line-through" : "none" },
-      { textDecoration: this.state.checkedItems.includes('Item4') ? "line-through" : "none" },
-      { textDecoration: this.state.checkedItems.includes('Item2') ? "line-through" : "none" }
-    ];
-    /*
-    [
-      'line-through',
-      'none',
-      'none',
-      'none'
-    ]
-    */
+    const items = [ 'Cheese', 'Milk', 'Eggs', 'Item1' ]; // Array Object
+    const { checkedItems } = this.state;
 
     return (
-      <ul>
-        <li style={ myStyle[0] } onClick={ this.toggleCheck }>Item1</li>
-        <li style={ myStyle[1] } onClick={ this.toggleCheck }>Item2</li>
-        <li style={ myStyle[2] } onClick={ this.toggleCheck }>Item3</li>
-        <li style={ myStyle[3] } onClick={ this.toggleCheck }>Item4</li>
-        <li style={ myStyle[4] } onClick={ this.toggleCheck }>Item2</li>
-      </ul>
+      <div>
+        <input/>
+        <ul>
+          {
+            items.map((item) => { // item => Milk
+              const myStyle = {
+                textDecoration: checkedItems.includes(item) ? 'line-through' : 'none'
+              }; // none
+
+              return <li style={ myStyle } onClick={ this.toggleCheck }>{ item }</li>;
+            })
+          }
+        </ul>
+      </div>
     );
   }
 }
